@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit Quotation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-white font-sans p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-5">
+            <h1 class="text-3xl font-bold text-amber-400">💰 Vendor Quotation Portal</h1>
+            <a href="{% url 'dashboard' %}" class="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm">🔙 Dashboard</a>
+        </div>
+        {% if vendor %}
+        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-semibold mb-4 text-slate-300">Submit Your Best Rates</h2>
+            <form method="POST" class="space-y-4">
+                {% csrf_token %}
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <select name="rfq_id" required class="bg-slate-950 border border-slate-700 p-3 rounded-xl text-white">
+                        <option value="">Select RFQ</option>
+                        {% for r in open_rfqs %}
+                        <option value="{{ r.id }}">{{ r.title }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="number" step="0.01" name="price_per_unit" placeholder="Price Per Unit (₹)" required class="bg-slate-950 border border-slate-700 p-3 rounded-xl text-white">
+                    <input type="number" name="delivery_days" placeholder="Delivery Timeline (Days)" required class="bg-slate-950 border border-slate-700 p-3 rounded-xl text-white">
+                </div>
+                <textarea name="notes" placeholder="Remarks..." rows="2" class="w-full bg-slate-950 border border-slate-700 p-3 rounded-xl text-white"></textarea>
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 font-bold p-3 rounded-xl text-slate-950">Submit Quotation</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

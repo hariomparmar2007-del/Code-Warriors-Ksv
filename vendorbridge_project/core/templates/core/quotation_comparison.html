@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Compare & Approve</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-white font-sans p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-5">
+            <h1 class="text-3xl font-bold text-teal-400">📊 Side-by-Side Comparison</h1>
+            <a href="{% url 'dashboard' %}" class="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm">🔙 Dashboard</a>
+        </div>
+        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <form method="GET" class="flex gap-4">
+                <select name="rfq_id" onchange="this.form.submit()" class="flex-1 bg-slate-950 border border-slate-700 p-3 rounded-xl text-white">
+                    <option value="">-- Choose an RFQ --</option>
+                    {% for r in all_rfqs %}
+                    <option value="{{ r.id }}" {% if r.id|slugify == selected_rfq_id %}selected{% endif %}>{{ r.title }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+        {% if selected_rfq_id %}
+        <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden">
+            <table class="w-full text-left">
+                <thead class="bg-slate-800 text-slate-400 text-sm">
+                    <tr>
+                        <th class="p-4">Vendor</th>
+                        <th class="p-4">Total Cost</th>
+                        <th class="p-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800">
+                    {% for q in quotations %}
+                    <tr class="{% if q.id == lowest_quote_id and q.status == 'Pending' %}bg-emerald-950/20{% elif q.status == 'Approved' %}bg-blue-950/20{% endif %}">
+                        <td class="p-4 font-bold">{{ q.vendor.company_name }}</td>
+                        <td class="p-4">₹{{ q.total_price }}</td>
+                        <td class="p-4">
+                            {% if q.status == 'Pending' %}
+                            <a href="{% url 'approve_quotation' q.id %}" class="bg-emerald-600 p-2 rounded-lg text-xs font-bold">Approve</a>
+                            {% elif q.status == 'Approved' %}
+                            <a href="{% url 'view_invoice' q.id %}" class="bg-indigo-600 p-2 rounded-lg text-xs font-bold">View Invoice</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

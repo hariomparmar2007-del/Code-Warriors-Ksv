@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RFQ Creation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-white font-sans p-8">
+    <div class="max-w-6xl mx-auto space-y-8">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-5">
+            <h1 class="text-3xl font-bold text-indigo-400">📄 Request For Quotation (RFQ)</h1>
+            <a href="{% url 'dashboard' %}" class="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-xl text-sm">🔙 Dashboard</a>
+        </div>
+        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h2 class="text-xl font-semibold mb-4 text-slate-300">Create New RFQ Requirement</h2>
+            <form method="POST" class="space-y-4">
+                {% csrf_token %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" name="title" placeholder="RFQ Title" required class="bg-slate-950 border border-slate-700 p-3 rounded-xl text-white">
+                    <input type="number" name="quantity" placeholder="Required Quantity" required class="bg-slate-950 border border-slate-700 p-3 rounded-xl text-white">
+                </div>
+                <textarea name="description" placeholder="Specifications..." required rows="3" class="w-full bg-slate-950 border border-slate-700 p-3 rounded-xl text-white"></textarea>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 font-bold p-3 rounded-xl">🚀 Broadcast RFQ</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
